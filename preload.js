@@ -82,5 +82,11 @@ window.addEventListener('DOMContentLoaded', () => {
     ipcRenderer.send('async-print-message', data)
   }
 
+  // 模板打印
+  const reverse_print = document.getElementById("reverse_print")
+  reverse_print.onclick = function () {
+    ipcRenderer.send('async-reverse_print-message', {})
+  }
+
 })
 

@@ -15,7 +15,7 @@ const path = require("path");
 const {app, BrowserWindow, ipcMain, dialog} = require('electron');
 const upgrade = require('./src/upgrade');
 const scan = require('./src/scan');
-const print = require('./src/print');
+const {serialportPrint,templatePrint} = require('./src/print');
 
 const SerialPort = require('serialport');
 const Readline = SerialPort.parsers.Readline;
@@ -169,8 +169,24 @@ ipcMain.on('async-print-message', (event, arg) => { // arg为接受到的消息
       message: '请先打开串口，再尝试驱动打印。'
     });
   }
-  print(port, event, arg)
+  serialportPrint(port, event, arg)
 });
+
+
+// 监听模板打印
+ipcMain.on('async-reverse_print-message', (event, arg) => { // arg为接受到的消息
+  console.log(arg)
+  if (port === undefined) {
+    return dialog.showMessageBox(win, {
+      title: "提示",
+      type: 'info',
+      message: '请先打开串口，再尝试打印模板。'
+    });
+  }
+  templatePrint(port, event, arg)
+});
+
+
 
 function createWindow() {
   //创建浏览器窗口
