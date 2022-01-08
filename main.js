@@ -125,7 +125,7 @@ ipcMain.on('async-upgrade-message', (event, arg) => { // arg为接受到的消�
       message: '请先打开串口，再尝试一键升级。'
     });
   }
-  if (Number(arg.baudRate) > 57600) {
+  if (Number(arg.baudRate) <= 57600) {
     return dialog.showMessageBox(win, {
       title: "提示",
       type: 'info',

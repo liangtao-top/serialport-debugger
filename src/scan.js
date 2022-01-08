@@ -300,7 +300,7 @@ function scan(event, arg) {
     event.sender.send('async-reply', JSON.stringify(info));
     const g_tTestInfo = info.detailInfo.testInfo
     g_tTestInfo.ucSampleType = 1
-    g_tTestInfo.uliFitValue = 700000
+    g_tTestInfo.uliFitValue = 70000
     const g_tStandCurve = info.detailInfo.standCurve
     const res = LcdCalculateConcentration(g_tTestInfo, g_tStandCurve)
     console.log(res)
