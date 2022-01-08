@@ -13,6 +13,7 @@
  */
 
 const SerialPort = require("serialport");
+const LcdCalculateConcentration = require("./procedure");
 const Readline = SerialPort.parsers.Readline;
 
 const REAGENT_BAR_CODE_BYTE_NUM = 176;
@@ -168,7 +169,7 @@ function analysisReagentDetailInfo(p) {
     if (!g_tStandCurve.hasOwnProperty("fCurveParam1")) {
       g_tStandCurve.fCurveParam1 = [];
     }
-    g_tStandCurve.fCurveParam1[ i ] = Buffer.from(ucTemp)
+    g_tStandCurve.fCurveParam1[ i ] = HexToSingle(Buffer.from(ucTemp).toString('hex'))
   }
   for ( i = 0; i < 16; i ++ ) {
     for ( j = 0; j < 4; j ++ ) {
@@ -177,24 +178,24 @@ function analysisReagentDetailInfo(p) {
     if (!g_tStandCurve.hasOwnProperty("fCurveParam2")) {
       g_tStandCurve.fCurveParam2 = [];
     }
-    g_tStandCurve.fCurveParam2[ i ] = Buffer.from(ucTemp)
+    g_tStandCurve.fCurveParam2[ i ] = HexToSingle(Buffer.from(ucTemp).toString('hex'))
   }
   for ( j = 0; j < 4; j ++ ) {
     ucTemp[ j ] = p[ k ++ ];
   }
-  g_tStandCurve.fLowLimit = Buffer.from(ucTemp)
+  g_tStandCurve.fLowLimit = HexToSingle(Buffer.from(ucTemp).toString('hex'))
   for ( j = 0; j < 4; j ++ ) {
     ucTemp[ j ] = p[ k ++ ];
   }
-  g_tStandCurve.fHighLimit = Buffer.from(ucTemp)
+  g_tStandCurve.fHighLimit = HexToSingle(Buffer.from(ucTemp).toString('hex'))
   for ( j = 0; j < 4; j ++ ) {
     ucTemp[ j ] = p[ k ++ ];
   }
-  g_tStandCurve.fLowReferencevalue = Buffer.from(ucTemp)
+  g_tStandCurve.fLowReferencevalue = HexToSingle(Buffer.from(ucTemp).toString('hex'))
   for ( j = 0; j < 4; j ++ ) {
     ucTemp[ j ] = p[ k ++ ];
   }
-  g_tStandCurve.fHighReferencevalue = Buffer.from(ucTemp)
+  g_tStandCurve.fHighReferencevalue = HexToSingle(Buffer.from(ucTemp).toString('hex'))
 //以下为全血流程参数
   g_tTestInfo.ucDilute_Wholeblood = p[ 173 ];
   if (g_tTestInfo.ucDilute_Wholeblood > 1)
@@ -213,6 +214,65 @@ function analysisReagentDetailInfo(p) {
     g_tTestInfo.ucResultPoint = 3;
   }
   return {testInfo: g_tTestInfo, runProcessFile: g_tRunProcessFile, standCurve: g_tStandCurve}
+}
+
+// 16进制转浮点数需要用到的函数
+function FillString(t, c, n, b) {
+  if (( t == "" ) || ( c.length != 1 ) || ( n <= t.length )) {
+    return t;
+  }
+  var l = t.length;
+  for ( var i = 0; i < n - l; i ++ ) {
+    if (b == true) {
+      t = c + t;
+    } else {
+      t += c;
+    }
+  }
+  return t;
+}
+
+// 16进制转浮点数
+function HexToSingle(t) {
+  t = t.replace(/\s+/g, "");
+  if (t == "") {
+    return "";
+  }
+  if (t == "00000000") {
+    return "0";
+  }
+  if (( t.length > 8 ) || ( isNaN(parseInt(t, 16)) )) {
+    return "Error";
+  }
+  if (t.length < 8) {
+    t = FillString(t, "0", 8, true);
+  }
+  t = parseInt(t, 16).toString(2);
+  t = FillString(t, "0", 32, true);
+  var s = t.substring(0, 1);
+  var e = t.substring(1, 9);
+  var m = t.substring(9);
+  e = parseInt(e, 2) - 127;
+  m = "1" + m;
+  if (e >= 0) {
+    m = m.substr(0, e + 1) + "." + m.substring(e + 1)
+  } else {
+    m = "0." + FillString(m, "0", m.length - e - 1, true)
+  }
+  if (m.indexOf(".") == - 1) {
+    m = m + ".0";
+  }
+  var a = m.split(".");
+  var mi = parseInt(a[ 0 ], 2);
+  var mf = 0;
+  for ( var i = 0; i < a[ 1 ].length; i ++ ) {
+    mf += parseFloat(a[ 1 ].charAt(i)) * Math.pow(2, - ( i + 1 ));
+  }
+  m = parseInt(mi) + parseFloat(mf);
+  if (s == 1) {
+    m = 0 - m;
+  }
+  return m;
 }
 
 // 监听扫码
@@ -238,6 +298,13 @@ function scan(event, arg) {
     const info = lcdGetReagentDetailInfo(convert94ToHex(data))
     console.log(info)
     event.sender.send('async-reply', JSON.stringify(info));
+    const g_tTestInfo = info.detailInfo.testInfo
+    g_tTestInfo.ucSampleType = 1
+    g_tTestInfo.uliFitValue = 700000
+    const g_tStandCurve = info.detailInfo.standCurve
+    const res = LcdCalculateConcentration(g_tTestInfo, g_tStandCurve)
+    console.log(res)
+    event.sender.send('async-reply', JSON.stringify(res));
   })
 
   // Read data that is available but keep the stream in "paused mode"

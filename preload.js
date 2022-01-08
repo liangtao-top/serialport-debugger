@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', () => {
     console.log(arg);
     let html = '';
     arg.forEach(port => {
-      const selected = port.path === "COM2" ? "selected" : "";
+      const selected = port.path === "COM5" ? "selected" : "";
       html += `<option value="${port.path}" ${selected}>${port.path} ${port.pnpId}</option>`;
     });
     port_number.innerHTML = html;

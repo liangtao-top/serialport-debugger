@@ -250,8 +250,8 @@ function LcdCalculateConcentration(g_tTestInfo, g_tStandCurve) {
     for ( i = 0; i < 4; i ++ ) {
       fParam2[ i ] = g_tStandCurve.fCurveParam1[ 6 + i ];
     }
-    uliTransitionPeriodL2 = parseInt(g_tStandCurve.fCurveParam1[ 10 ].toString('hex'), 16);
-    uliTransitionPeriodH2 = parseInt(g_tStandCurve.fCurveParam1[ 11 ].toString('hex'), 16);
+    uliTransitionPeriodL2 = parseInt(g_tStandCurve.fCurveParam1[ 10 ]);
+    uliTransitionPeriodH2 = parseInt(g_tStandCurve.fCurveParam1[ 11 ]);
     for ( i = 0; i < 4; i ++ ) {
       fParam3[ i ] = g_tStandCurve.fCurveParam1[ 12 + i ];
     }
@@ -260,18 +260,17 @@ function LcdCalculateConcentration(g_tTestInfo, g_tStandCurve) {
     for ( i = 0; i < 4; i ++ ) {
       fParam1[ i ] = g_tStandCurve.fCurveParam2[ i ];
     }
-    uliTransitionPeriodL1 = parseInt(g_tStandCurve.fCurveParam2[ 4 ].toString('hex'), 16);
-    uliTransitionPeriodH1 = parseInt(g_tStandCurve.fCurveParam2[ 5 ].toString('hex'), 16);
+    uliTransitionPeriodL1 = parseInt(g_tStandCurve.fCurveParam2[ 4 ]);
+    uliTransitionPeriodH1 = parseInt(g_tStandCurve.fCurveParam2[ 5 ]);
     for ( i = 0; i < 4; i ++ ) {
       fParam2[ i ] = g_tStandCurve.fCurveParam2[ 6 + i ];
     }
-    uliTransitionPeriodL2 = parseInt(g_tStandCurve.fCurveParam2[ 10 ].toString('hex'), 16);
-    uliTransitionPeriodH2 = parseInt(g_tStandCurve.fCurveParam2[ 11 ].toString('hex'), 16);
+    uliTransitionPeriodL2 = parseInt(g_tStandCurve.fCurveParam2[ 10 ]);
+    uliTransitionPeriodH2 = parseInt(g_tStandCurve.fCurveParam2[ 11 ]);
     for ( i = 0; i < 4; i ++ ) {
       fParam3[ i ] = g_tStandCurve.fCurveParam2[ 12 + i ];
     }
   }
-
   //2、根据标准曲线计算最低和最高检测浓度对应的信号值
   uliLowValue = CalculateSignalValue(fParam1, g_tStandCurve.fLowLimit);       //计算最低检测浓度对应的信号值
   if (uliTransitionPeriodH1 === 0)  //表示只有一条标准曲线
@@ -300,7 +299,7 @@ function LcdCalculateConcentration(g_tTestInfo, g_tStandCurve) {
     if (g_tTestInfo.uliFitValue < uliLowValue) {
       g_tTestInfo.ucResultFlag = 2;  //小于
       g_tTestInfo.fResult = g_tStandCurve.fLowLimit;
-      return;
+      return g_tTestInfo;
     }
   } else if (g_tTestInfo.hasOwnProperty('uliFitValue') && g_tTestInfo.uliFitValue > uliHighValue) {
     // g_tTestInfo.uliFitValue = (unsigned long int)((float)g_tTestInfo.uliFitValue*g_tSystemErrorAdjustment.ucKValue + g_tSystemErrorAdjustment.ucBValue);
@@ -308,7 +307,7 @@ function LcdCalculateConcentration(g_tTestInfo, g_tStandCurve) {
     if (g_tTestInfo.uliFitValue > uliHighValue) {
       g_tTestInfo.ucResultFlag = 3;  //大于
       g_tTestInfo.fResult = g_tStandCurve.fHighLimit;
-      return;
+      return g_tTestInfo;
     }
   }
 
@@ -346,7 +345,7 @@ function LcdCalculateConcentration(g_tTestInfo, g_tStandCurve) {
     g_tTestInfo.ucResultFlag = 3;  //大于
     g_tTestInfo.fResult = g_tStandCurve.fHighLimit;
   }
-  return {ucResultFlag: g_tTestInfo.ucResultFlag, fResult: g_tTestInfo.fResult};
+  return g_tTestInfo;
 }
 
 module.exports = LcdCalculateConcentration
