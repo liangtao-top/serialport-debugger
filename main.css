@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.rev {
+    position: relative;
+    height: 220px;
+    width: calc(100% - 20px);
+    margin: 0 10px;
+    background-color: #000c17;
+}
+
+#pre {
+    color: white;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0;
+    padding: 10px;
+    font-size: 0;
+}
+
+#pre > p {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    width: 100%;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow: hidden;
+}
+
+form {
+    position: relative;
+    width: 100%;
+    padding-left: 10px;
+
+}
+
+.item {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.item + .item {
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+}
+
+form > .item:last-child {
+    text-align: right;
+}
+
+label {
+    position: relative;
+
+}
+
+textarea {
+    width: 100%;
+}
+
+span {
+    font-size: 12px;
+}
+
+.setting {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 10px 10px 0 10px;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.setting > .left {
+    width: 30%;
+}
+
+.setting > .right {
+    width: 70%;
+}
+
+.port {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+body > div.setting > div.left > div > div:nth-child(1) > div.right {
+    width: calc(100% - 52px);
+    text-align: right;
+}
+
+body > div.setting > div.left > div > div:nth-child(1) > div.right select {
+    width: 100%;
+}
+
+.state {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.state.open {
+    background-color: #52c41a !important;
+}
+
+body > div.setting > div.left > div > div:nth-child(3) > div.right > button {
+    font-size: 12px;
+}
+
+.state.close {
+    background-color: red !important;
+}

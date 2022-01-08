@@ -1,3 +1,3 @@
-# 串口数据调试器
+# 网络/串口数据调试器 v1.0.0
 
-串口/网络数据调试器
+作者：TaoGe <liangtao.gz@foxmail.com>

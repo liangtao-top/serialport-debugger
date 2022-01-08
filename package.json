@@ -1,0 +1,29 @@
+{
+  "name": "serialport-debug-tool",
+  "version": "1.0.0",
+  "description": "串口/网络数据调试器",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TaoGe <liangtao.gz@foxmail.com>",
+  "license": "ISC",
+  "homepage": ".",
+  "devDependencies": {
+    "electron": "^16.0.6",
+    "electron-packager": "^15.4.0",
+    "electron-rebuild": "^3.2.5"
+  },
+  "dependencies": {
+    "@serialport/bindings": "^9.2.8",
+    "@serialport/parser-byte-length": "^9.2.4",
+    "@serialport/parser-cctalk": "^9.2.4",
+    "@serialport/parser-delimiter": "^9.2.4",
+    "@serialport/parser-readline": "^9.2.4",
+    "@serialport/parser-ready": "^9.2.4",
+    "@serialport/parser-regex": "^9.2.4",
+    "iconv-lite": "^0.6.3",
+    "serialport": "^9.2.8"
+  }
+}
