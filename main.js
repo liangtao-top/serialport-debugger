@@ -101,7 +101,7 @@ ipcMain.on('async-io-message', (event, arg) => {
 });
 
 ipcMain.on('async-message', (event, arg) => { // arg为接受到的消息
-                                              // Because there's no callback to write, write errors will be emitted on the port:
+  // Because there's no callback to write, write errors will be emitted on the port:
   console.log(arg)
   const cmd = Buffer.from(arg.replace(/\s*/g, ""), "hex");
   console.log(cmd);
@@ -117,7 +117,7 @@ ipcMain.on('async-message', (event, arg) => { // arg为接受到的消息
 
 // 一键升级
 ipcMain.on('async-upgrade-message', (event, arg) => { // arg为接受到的消息
-  // Because there's no callback to write, write errors will be emitted on the port:
+                                                      // Because there's no callback to write, write errors will be emitted on the port:
   if (port === undefined) {
     return dialog.showMessageBox(win, {
       title: "提示",
@@ -147,7 +147,7 @@ ipcMain.on('async-upgrade-message', (event, arg) => { // arg为接受到的消�
 
 // 监听扫描
 ipcMain.on('async-scan-message', (event, arg) => { // arg为接受到的消息
-                                                   // Because there's no callback to write, write errors will be emitted on the port:
+  // Because there's no callback to write, write errors will be emitted on the port:
   console.log(arg)
   if (Number(arg.baudRate) !== 9600) {
     return dialog.showMessageBox(win, {

@@ -24,9 +24,11 @@ function buffer(hex) {
 
 function serialportPrint(port, event, arg) {
   const list = []
-  list.push(buffer('1b 40 00 0d 0a 1b 38 00 1c 26'))
+  list.push(buffer('1b 40 00 0d 0a 1b 38 00 1B 63 00 1c 26'))
   if (arg !== null && arg !== undefined && arg !== '') {
-    list.push(iconv.encode(arg, 'GBK'))
+    const content = iconv.encode(arg, 'GBK')
+    console.log(content.toString('hex'), content)
+    list.push(content)
   }
   list.push(buffer('1c 2e 0d 0a 0d 0a 0d 0a 0d 0a 0d 0a 0d 0a 0d 0a 0d 0a'))
   port.write(Buffer.concat(list))
