@@ -223,8 +223,8 @@ function portWrite(port, hex, int = 0, ms = 20) {
   for ( let i = 0; i < buffer.length; i ++ ) {
     const buf = buffer.slice(i, i + 1);
     setTimeout(() => {
-      console.log(i, buf)
-      port.write(buf, writeCallback)
+    console.log(i, buf)
+    port.write(buf, writeCallback)
     }, int + ( ms * i ));
   }
 }
@@ -262,6 +262,7 @@ function readBinary(filename, callback) {
   rstream.on('readable', function () {
     const chunk = rstream.read();
     if (chunk != null) {
+      console.log("read", chunk)
       chunks.push(chunk);
       size += chunk.length;
     }

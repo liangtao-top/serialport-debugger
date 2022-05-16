@@ -15,7 +15,7 @@ const path = require("path");
 const {app, BrowserWindow, ipcMain, dialog} = require('electron');
 const upgrade = require('./src/upgrade');
 const scan = require('./src/scan');
-const {serialportPrint,templatePrint} = require('./src/print');
+const {serialportPrint, templatePrint} = require('./src/print');
 
 const SerialPort = require('serialport');
 const Readline = SerialPort.parsers.Readline;
@@ -125,7 +125,7 @@ ipcMain.on('async-upgrade-message', (event, arg) => { // arg为接受到的消�
       message: '请先打开串口，再尝试一键升级。'
     });
   }
-  if (Number(arg.baudRate) <= 57600) {
+  if (Number(arg.baudRate) > 57600) {
     return dialog.showMessageBox(win, {
       title: "提示",
       type: 'info',
@@ -135,7 +135,7 @@ ipcMain.on('async-upgrade-message', (event, arg) => { // arg为接受到的消�
   const u = dialog.showOpenDialog(win, {
     title: "请选择文件",
     properties: ['openFile'],
-    filters: [{name: 'HEX', extensions: ['hex']}]
+    filters: [{name: 'BIN', extensions: ['bin']}]
   }).then(result => {
     upgrade(port, result.filePaths[ 0 ], event, arg)
   }).catch(err => {
@@ -185,7 +185,6 @@ ipcMain.on('async-reverse_print-message', (event, arg) => { // arg为接受到�
   }
   templatePrint(port, event, arg)
 });
-
 
 
 function createWindow() {
